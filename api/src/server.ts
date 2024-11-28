@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import eventRoute from "./routes/event.route";
+import ErrorMiddleware from "./middlewares/error.middleware";
 
 const app: Application = express();
 
@@ -9,5 +10,7 @@ app.use(express.json());
 // app.use("/", homeRoute);
 
 app.use("/event-management", eventRoute);
+
+app.use(ErrorMiddleware);
 
 export default app;
