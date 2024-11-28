@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id             Int      @id @default(autoincrement())
+  name           String
+  description    String
+  price          Int // Price in IDR (0 for free events)
+  date           DateTime // Date of the event
+  time           String // Time in HH:mm format (can also be part of the date)
+  location       String
+  availableSeats Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organizerId Int
+  organizer   User @relation(fields: [organizerId], references: [id])
+  // // Relations
+  // organizerId Int
+  // organizer   User @relation(fields: [organizerId], references: [id]) // Event organizer
+
+  // // Reverse relation to User (event creator)
+  // creator User @relation("UserEvents", fields: [userId], references: [id]) // Correct inverse relation
+  // userId  Int
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String
+  events   Event[]
+  // events   Event[] @relation("UserEvents") // Events created by this user
+
+  // Event Event[]
+}
