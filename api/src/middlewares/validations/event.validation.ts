@@ -53,9 +53,12 @@ export const EventValidator = [
       console.log(errors);
 
       if (!errors.isEmpty()) throw new Error(errors.array()[0].msg);
+      console.log("Validated");
 
       next();
     } catch (error) {
+      console.log("Not Validated");
+
       next(error);
     }
   },

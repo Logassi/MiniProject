@@ -5,8 +5,18 @@ const prisma = new PrismaClient();
 
 async function CreateEvent(req: Request, res: Response, next: NextFunction) {
   try {
-    const { name, description, price, date, time, location, availableSeats } =
-      req.body;
+    const {
+      name,
+      description,
+      price,
+      date,
+      time,
+      location,
+      availableSeats,
+      organizerId,
+    } = req.body;
+
+    console.log("Get data from req.body");
 
     await prisma.$transaction(async (prisma) => {
       await prisma.event.create({
@@ -14,13 +24,15 @@ async function CreateEvent(req: Request, res: Response, next: NextFunction) {
           name,
           description,
           price,
-          date: new Date("2024-12-12T09:00:00"), // Passing as Date object
+          date,
+          // date: new Date("2024-12-12T09:00:00"),// This one is for testing // Passing as Date object
           time,
           location,
           availableSeats,
-          organizerId: 1,
+          organizerId,
         },
       });
+      console.log("Trying to send data");
     });
 
     console.log("Event Created");
