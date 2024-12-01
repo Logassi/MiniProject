@@ -27,22 +27,26 @@ model Event {
 
   organizerId Int
   organizer   User @relation(fields: [organizerId], references: [id])
-  // // Relations
-  // organizerId Int
-  // organizer   User @relation(fields: [organizerId], references: [id]) // Event organizer
+}
 
-  // // Reverse relation to User (event creator)
-  // creator User @relation("UserEvents", fields: [userId], references: [id]) // Correct inverse relation
-  // userId  Int
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String @unique // Examples: "attendee", "eventOrganizer"
+
+  users User[]
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  name     String
-  email    String  @unique
-  password String
-  events   Event[]
-  // events   Event[] @relation("UserEvents") // Events created by this user
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  password     String
+  referralCode String?
+  point        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  events       Event[]
 
-  // Event Event[]
+  roleId Int
+  role   Role @relation(fields: [roleId], references: [id])
 }

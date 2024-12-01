@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import eventRoute from "./routes/event.route";
+import accountRoute from "./routes/acount.route";
 import ErrorMiddleware from "./middlewares/error.middleware";
 import cors from "cors";
 import { BASE_WEB_URL } from "./utils/envConfig";
@@ -19,6 +20,8 @@ app.use(express.json());
 // app.use("/", homeRoute);
 
 app.use("/event-management", eventRoute);
+
+app.use("/account-management", accountRoute);
 
 app.use(ErrorMiddleware);
 
