@@ -25,11 +25,12 @@ async function CreateEvent(req: Request, res: Response, next: NextFunction) {
           description,
           price,
           date,
-          // date: new Date("2024-12-12T09:00:00"),// This one is for testing // Passing as Date object
+          // date: new Date("2024-12-12T09:00:00"), // This one is for testing // Passing as Date object
           time,
           location,
           availableSeats,
           organizerId,
+          // organizerId: 2, // testing postman
         },
       });
       console.log("Trying to send data");
@@ -43,4 +44,7 @@ async function CreateEvent(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export { CreateEvent };
+export {
+  CreateEvent,
+  // GetAllEventCreated
+};

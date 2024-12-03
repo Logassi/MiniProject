@@ -13,8 +13,8 @@ export const EventValidator = [
   body("description")
     .notEmpty()
     .withMessage("Description is required")
-    .isLength({ min: 10 })
-    .withMessage("Description must be at least 10 characters"),
+    .isLength({ min: 5 })
+    .withMessage("Description must be at least 5 characters"),
 
   // Validate the event price
   body("price")

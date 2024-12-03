@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import { genSalt, hash } from "bcrypt";
+import { compare, genSalt, hash } from "bcrypt";
 import { Request, Response, NextFunction } from "express";
+import { sign } from "jsonwebtoken";
+import { SECRET_KEY } from "../utils/envConfig";
 
 const prisma = new PrismaClient();
 
@@ -61,21 +63,41 @@ async function Register(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-// async function GetAllUserData(req: Request, res: Response, next: NextFunction) {
-//   try {
-//     // SELECT * FROM user
-//     const data = await prisma.user.findMany();
+async function Login(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { email, password } = req.body;
 
-//     res.status(200).send({
-//       message: "success",
-//       data,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// }
+    const findUser = await prisma.user.findUnique({
+      where: { email },
+      include: {
+        role: true,
+      },
+    });
 
-export {
-  Register,
-  //  GetAllUserData
-};
+    if (!findUser) throw new Error("Invalid Email");
+
+    // if (!findUser.isVerified)
+    //   throw new Error("Please check email for verify account");
+
+    const isValid = await compare(password, findUser.password);
+
+    if (!isValid) throw new Error("Invalid password");
+
+    const payload = {
+      email,
+      name: findUser.name,
+      role: findUser.role.name,
+    };
+
+    const token = sign(payload, SECRET_KEY as string, { expiresIn: "1hr" });
+
+    res.status(200).cookie("access_token", token).send({
+      message: "success",
+      data: token,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export { Register, Login };
