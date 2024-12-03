@@ -11,6 +11,8 @@ async function VerifyToken(req: Request, res: Response, next: NextFunction) {
 
     const user = verify(token, SECRET_KEY as string);
 
+    // console.log(user);
+
     if (!user) throw new Error("Unauthorized");
 
     req.user = user as User;
@@ -23,9 +25,10 @@ async function VerifyToken(req: Request, res: Response, next: NextFunction) {
 
 async function AdminGuard(req: Request, res: Response, next: NextFunction) {
   try {
-    // console.log(req.user?.role);
+    console.log(req.user?.roleId);
+    console.log(req.user?.name);
 
-    if (req.user?.role !== "eventOrganizer") {
+    if (req.user?.roleId !== 2) {
       console.log("Not an Event Organizer");
       throw new Error("Not an Event Organizer");
     }

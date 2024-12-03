@@ -112,16 +112,17 @@ async function Login(req: Request, res: Response, next: NextFunction) {
     if (!isValid) throw new Error("Invalid password");
 
     const payload = {
+      id: findUser.id,
       email,
       name: findUser.name,
-      role: findUser.role.name,
+      roleId: findUser.role.id,
     };
 
     const token = sign(payload, SECRET_KEY as string, { expiresIn: "1hr" });
 
     res.status(200).cookie("access_token", token).send({
       message: "success",
-      data: token,
+      access_token: token,
     });
   } catch (err) {
     next(err);

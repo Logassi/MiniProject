@@ -5,9 +5,11 @@ import Swal from "sweetalert2";
 import EventSchema from "./schema";
 import { useRouter } from "next/navigation";
 import IEvent from "../types";
+import useAuthStore from "@/stores/user-store";
 
 export default function EventCreateForm() {
   const router = useRouter();
+  const { user } = useAuthStore();
 
   // Form submission handler
   const createEvent = async (params: IEvent) => {
@@ -16,6 +18,8 @@ export default function EventCreateForm() {
         ...params,
         date: new Date(params.date).toISOString(), // Ensure proper date format
       };
+
+      console.log(formattedParams);
 
       const { data } = await axiosInstance.post(
         "/event-management/create",
@@ -50,7 +54,7 @@ export default function EventCreateForm() {
           time: "",
           location: "",
           availableSeats: 0,
-          organizerId: 0,
+          organizerId: user?.id as number,
         }}
         validationSchema={EventSchema}
         onSubmit={createEvent}
@@ -164,22 +168,6 @@ export default function EventCreateForm() {
               />
               <ErrorMessage
                 name="availableSeats"
-                component="div"
-                className="text-red-500 text-sm"
-              />
-            </div>
-
-            <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-gray-900">
-                Organizer Id
-              </label>
-              <Field
-                type="number"
-                name="organizerId"
-                className="w-full p-2 border rounded-md"
-              />
-              <ErrorMessage
-                name="organizerId"
                 component="div"
                 className="text-red-500 text-sm"
               />

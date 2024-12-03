@@ -16,6 +16,13 @@ async function CreateEvent(req: Request, res: Response, next: NextFunction) {
       organizerId,
     } = req.body;
 
+    console.log(req.body);
+    console.log(typeof date);
+
+    const parsedDate = new Date(date); // Ensure this is a valid date
+
+    console.log(typeof parsedDate);
+
     console.log("Get data from req.body");
 
     await prisma.$transaction(async (prisma) => {
@@ -25,12 +32,13 @@ async function CreateEvent(req: Request, res: Response, next: NextFunction) {
           description,
           price,
           date,
+          // date: parsedDate,
           // date: new Date("2024-12-12T09:00:00"), // This one is for testing // Passing as Date object
           time,
           location,
           availableSeats,
           organizerId,
-          // organizerId: 2, // testing postman
+          // organizerId: 6, // testing postman
         },
       });
       console.log("Trying to send data");
