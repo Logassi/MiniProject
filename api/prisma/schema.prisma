@@ -41,7 +41,7 @@ model User {
   name         String
   email        String   @unique
   password     String
-  referralCode String?
+  referralCode String?  @unique
   point        Int      @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -49,4 +49,17 @@ model User {
 
   roleId Int
   role   Role @relation(fields: [roleId], references: [id])
+
+  discountCoupons DiscountCoupon[]
+}
+
+model DiscountCoupon {
+  id       Int      @id @default(autoincrement())
+  code     String   @unique
+  discount Float // Percentage (e.g., 0.15 for 15%)
+  isUsed   Boolean  @default(false)
+  issuedAt DateTime @default(now())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 }

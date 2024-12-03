@@ -12,6 +12,17 @@ async function Register(req: Request, res: Response, next: NextFunction) {
 
     const { name, email, password, roleId, referralCode } = req.body;
 
+    let referrer = null;
+    if (referralCode) {
+      referrer = await prisma.user.findUnique({
+        where: { referralCode },
+      });
+
+      if (!referrer) {
+        throw new Error("Invalid referral code");
+      }
+    }
+
     const findUserEmail = await prisma.user.findUnique({
       where: { email },
     });
@@ -53,6 +64,23 @@ async function Register(req: Request, res: Response, next: NextFunction) {
       });
 
       console.log("Referral code generated and updated");
+
+      if (referrer) {
+        // Grant points to the referrer
+        await prisma.user.update({
+          where: { id: referrer.id },
+          data: { point: { increment: 30000 } },
+        });
+
+        // Issue a discount coupon to the new user
+        await prisma.discountCoupon.create({
+          data: {
+            code: `DISCOUNT_${newUser.id}`,
+            discount: 0.15,
+            userId: newUser.id,
+          },
+        });
+      }
     });
 
     res.status(200).send({
