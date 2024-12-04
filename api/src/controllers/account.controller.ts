@@ -64,6 +64,7 @@ async function Register(req: Request, res: Response, next: NextFunction) {
       });
 
       console.log("Referral code generated and updated");
+      console.log(referrer);
 
       if (referrer) {
         // Grant points to the referrer
@@ -80,6 +81,7 @@ async function Register(req: Request, res: Response, next: NextFunction) {
             userId: newUser.id,
           },
         });
+        console.log("test");
       }
     });
 

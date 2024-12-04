@@ -49,8 +49,8 @@ export default function RegisterForm() {
           name: "",
           email: "",
           password: "",
-          refferal: "",
           roleId: "1", // Default to 'attendee' role
+          referralCode: "",
         }}
         validationSchema={RegisterSchema}
         onSubmit={handleRegister}
@@ -110,12 +110,12 @@ export default function RegisterForm() {
                 Referral
               </label>
               <Field
-                type="refferal"
-                name="refferal"
+                type="referralCode"
+                name="referralCode"
                 className="w-full p-2 border rounded-md"
               />
               <ErrorMessage
-                name="refferal"
+                name="referralCode"
                 component="div"
                 className="text-red-500 text-sm"
               />
