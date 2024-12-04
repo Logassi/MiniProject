@@ -10,7 +10,7 @@ export default function HeroSection() {
       button: "Explore Now",
     },
     {
-      image: "/images/hero2.png",
+      image: "/images/hero2.jpg",
       title: "Rave Revivals",
       subtitle: "Experience music like never before.",
       button: "Find Out More",
